@@ -3,8 +3,11 @@ package br.com.douglasmotta.naivagtioncomponentappmirror.ui.registration
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import br.com.douglasmotta.naivagtioncomponentappmirror.data.repository.interfaces.UserRepository
 import br.com.douglasmotta.naivagtioncomponentappmirror.R
+import br.com.douglasmotta.naivagtioncomponentappmirror.ui.registration.model.RegistrationViewParams
+import kotlinx.coroutines.launch
 
 
 class RegistrationViewModel(
@@ -27,6 +30,8 @@ class RegistrationViewModel(
         }
     }
 
+    private var registrationViewParams = RegistrationViewParams()
+
     private fun isValidProfileData(name: String, bio: String): Boolean {
         val invalidFields = arrayListOf<Pair<String, Int>>()
         if (name.isEmpty()) {
@@ -47,10 +52,18 @@ class RegistrationViewModel(
 
     fun createCredentials(username: String, password: String) {
         if (isValidCredentials(username, password)) {
-            // ... create account
-            // ... authenticate
-            this.authToken = "token"
-            _registrationStateEvent.value = RegistrationState.RegistrationCompleted
+
+            viewModelScope.launch {
+
+                registrationViewParams.username = username
+                registrationViewParams.password = password
+
+                userRepository.createUser(registrationViewParams)
+
+                this@RegistrationViewModel.authToken = "token"
+                _registrationStateEvent.value = RegistrationState.RegistrationCompleted
+            }
+
         }
     }
 

@@ -9,9 +9,9 @@ import br.com.douglasmotta.naivagtioncomponentappmirror.ui.registration.model.Re
 
 class UserDbDataSource(
     private val userDao: UserDao
-): UserRepository {
+) : UserRepository {
 
-    override fun createUser(registrationViewParams: RegistrationViewParams) {
+    override suspend fun createUser(registrationViewParams: RegistrationViewParams) {
 
         val userEntity = registrationViewParams.toUserEntity()
 
@@ -20,13 +20,13 @@ class UserDbDataSource(
     }
 
     override fun getUser(id: Long): User {
-        return  userDao.getUser(id).toUser()
+        return userDao.getUser(id).toUser()
 
     }
 
     override fun login(username: String, password: String): Long {
 
-        return  userDao.login(username, password)
+        return userDao.login(username, password)
 
     }
 }

@@ -5,9 +5,9 @@ import br.com.douglasmotta.naivagtioncomponentappmirror.data.model.User
 
 interface UserRepository {
 
-    fun createUser(registrationViewParams: RegistrationViewParams)
+    suspend fun createUser(registrationViewParams: RegistrationViewParams)
 
-    fun getUser(id:Long): User
+     fun getUser(id:Long): User
 
-    fun login(username:String, password:String):Long
+     fun login(username:String, password:String):Long
 }
